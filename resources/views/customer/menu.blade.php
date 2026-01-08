@@ -3,240 +3,311 @@
 @section('title', 'Foodhouse Menu')
 
 @section('content')
-<div class="container-fluid py-4">
-    <div class="row">
-        <div class="col-md-3">
-            <!-- Categories Sidebar -->
-            <div class="card shadow-lg mb-4 border-0">
-                <div class="card-header bg-gradient-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-list-alt me-2"></i>Categories</h5>
-                </div>
-                <div class="list-group list-group-flush rounded-bottom">
-                    <a href="#" class="list-group-item list-group-item-action active category-filter d-flex align-items-center" 
-                       data-category="all" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
-                        <i class="fas fa-layer-group me-3"></i>
-                        <span>All Items</span>
-                        <span class="badge bg-white text-primary ms-auto">{{ $categories->sum(function($cat) { return $cat->menuItems->count(); }) }}</span>
-                    </a>
-                    @foreach($categories as $category)
-                    <a href="#" class="list-group-item list-group-item-action category-filter d-flex align-items-center" 
-                       data-category="{{ $category->id }}">
-                        <i class="fas fa-utensils me-3 text-primary"></i>
-                        <span>{{ $category->name }}</span>
-                        <span class="badge bg-primary rounded-pill ms-auto">{{ $category->menuItems->count() }}</span>
-                    </a>
-                    @endforeach
-                </div>
-            </div>
-
-            <!-- Cart Summary -->
-            <div class="card shadow-lg border-0 sticky-top" style="top: 20px;">
-                <div class="card-header bg-gradient-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-shopping-cart me-2"></i>Your Order</h5>
-                </div>
-                <div class="card-body">
-                    <div id="cartItems" style="max-height: 300px; overflow-y: auto;">
-                        <!-- Cart items will be displayed here -->
+<div class="container-fluid p-0">
+    <!-- Premium Header with Logo -->
+    <div class="premium-header py-3" style="background: linear-gradient(135deg, #e63946 0%, #d32f2f 100%);">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <!-- Awesome Logo Design -->
+                    <div class="logo-container d-flex align-items-center">
+                        <div class="logo-wrapper position-relative me-3">
+                            <div class="logo-circle">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="logo-ring"></div>
+                        </div>
+                        <div class="logo-text">
+                            <h1 class="brand-title mb-0 fw-bold">FOODHOUSE</h1>
+                            <p class="brand-subtitle mb-0 text-light opacity-85">Premium Dining Experience</p>
+                        </div>
                     </div>
-                    <div class="mt-3 pt-3 border-top">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Subtotal:</span>
-                            <span id="cartSubtotal" class="fw-bold">₱0.00</span>
+                </div>
+                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                    <div class="header-info">
+                        <div class="info-item d-inline-flex align-items-center me-4 me-lg-0 mb-2 mb-lg-0">
+                            <div class="info-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="ms-2">
+                                <div class="info-label small">NOW SERVING</div>
+                                <div class="info-value fw-bold" id="currentTime">{{ now()->format('h:i A') }}</div>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Tax (12%):</span>
-                            <span id="cartTax" class="fw-bold">₱0.00</span>
+                        <div class="info-item d-inline-flex align-items-center">
+                            <div class="info-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="ms-2">
+                                <div class="info-label small">TODAY'S DATE</div>
+                                <div class="info-value fw-bold" id="currentDate">{{ now()->format('M d, Y') }}</div>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-between mb-3">
-                            <strong class="text-success">Total:</strong>
-                            <strong id="cartTotal" class="text-success fs-5">₱0.00</strong>
-                        </div>
-                        <button class="btn btn-lg btn-gradient-primary btn-block shadow-sm" id="checkoutBtn" disabled>
-                            <i class="fas fa-credit-card me-2"></i> Checkout Now
-                        </button>
-                        <button class="btn btn-outline-danger btn-block mt-2" id="clearCartBtn">
-                            <i class="fas fa-trash-alt me-2"></i> Clear Cart
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-md-9">
-            <!-- Welcome Banner -->
-            <div class="card shadow-lg mb-4 border-0 bg-gradient-info text-white">
-                <div class="card-body p-4">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <h2 class="fw-bold mb-2"><i class="fas fa-utensils me-3"></i>Welcome to Foodhouse!</h2>
-                            <p class="mb-0">Browse our delicious menu and place your order</p>
+    <!-- Full Width Main Content -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <div class="row g-0">
+                <!-- Categories Sidebar - Full Width -->
+                <div class="col-xl-3 col-lg-4">
+                    <div class="sidebar-container vh-100">
+                        <!-- Categories Section -->
+                        <div class="sidebar-section">
+                            <div class="section-header">
+                                <h3 class="section-title">
+                                    <i class="fas fa-layer-group me-2"></i>Categories
+                                </h3>
+                            </div>
+                            <div class="category-list">
+                                <a href="#" class="category-item active" data-category="all">
+                                    <div class="category-icon">
+                                        <i class="fas fa-bars"></i>
+                                    </div>
+                                    <div class="category-content">
+                                        <div class="category-name">All Items</div>
+                                        <div class="category-count">{{ $categories->sum(function($cat) { return $cat->menuItems->count(); }) }}</div>
+                                    </div>
+                                </a>
+                                @foreach($categories as $category)
+                                <a href="#" class="category-item" data-category="{{ $category->id }}">
+                                    <div class="category-icon">
+                                        <i class="fas fa-utensils"></i>
+                                    </div>
+                                    <div class="category-content">
+                                        <div class="category-name">{{ $category->name }}</div>
+                                        <div class="category-count">{{ $category->menuItems->count() }}</div>
+                                    </div>
+                                </a>
+                                @endforeach
+                            </div>
                         </div>
-                        <div class="col-md-4 text-end">
-                            <i class="fas fa-hamburger fa-4x opacity-50"></i>
+
+                        <!-- Cart Summary - Full Width -->
+                        <div class="cart-summary mt-4">
+                            <div class="section-header">
+                                <h3 class="section-title">
+                                    <i class="fas fa-shopping-basket me-2"></i>Your Order
+                                </h3>
+                            </div>
+                            <div class="cart-content">
+                                <div id="cartItems" class="cart-items-container">
+                                    <!-- Cart items will be displayed here -->
+                                </div>
+                                <div class="cart-totals mt-4">
+                                    <div class="total-row">
+                                        <span class="total-label">Subtotal</span>
+                                        <span id="cartSubtotal" class="total-value">₱0.00</span>
+                                    </div>
+                                    <div class="total-row">
+                                        <span class="total-label">Tax (12%)</span>
+                                        <span id="cartTax" class="total-value">₱0.00</span>
+                                    </div>
+                                    <div class="total-row grand-total">
+                                        <span class="total-label">Total</span>
+                                        <span id="cartTotal" class="total-value">₱0.00</span>
+                                    </div>
+                                </div>
+                                <div class="cart-actions mt-4">
+                                    <button class="btn btn-checkout w-100 mb-3" id="checkoutBtn" disabled>
+                                        <i class="fas fa-credit-card me-2"></i>PROCEED TO CHECKOUT
+                                    </button>
+                                    <button class="btn btn-clear w-100" id="clearCartBtn">
+                                        <i class="fas fa-trash-alt me-2"></i>CLEAR CART
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Menu Items Grid -->
-            <div class="row" id="menuItemsGrid">
-                @foreach($categories as $category)
-                    @foreach($category->menuItems as $item)
-                    <div class="col-md-4 mb-4 menu-item" data-category="{{ $category->id }}">
-                        <div class="card h-100 shadow-lg border-0 hover-effect">
-                            <!-- Image Section -->
-                            @php
-                                if ($item->image_url) {
-                                    $imagePath = $item->image_url;
-                                } else {
-                                    if ($item->item_name == 'Crispy Calamares') {
-                                        $imagePath = 'images/CALAMARES.jpg';
-                                    }
-                                    elseif ($item->item_name == 'Nachos Supreme') {
-                                        $imagePath = 'images/NACHOS.jpg';
-                                    }
-                                    elseif ($item->item_name == 'Fresh Lemonade') {
-                                        $imagePath = 'images/LEMONADE.jpg';
-                                    }
-                                    elseif ($item->item_name == 'Iced Tea') {
-                                        $imagePath = 'images/NESTEA.jpg';
-                                    }
-                                    elseif ($item->item_name == 'Halo-Halo Special') {
-                                        $imagePath = 'images/HALO HALO.jpg';
-                                    }
-                                    elseif ($item->item_name == 'Leche Flan') {
-                                        $imagePath = 'images/LETCHE FLAN.jpg';
-                                    }
-                                    elseif ($item->item_name == 'Beef Steak') {
-                                        $imagePath = 'images/BEEF STEAK.jpg';
-                                    }
-                                    elseif ($item->item_name == 'Grilled Pork Chop') {
-                                        $imagePath = 'images/GRILLED.JPG';
-                                    }
-                                    elseif ($item->item_name == 'Chicken Adobo') {
-                                        $imagePath = 'images/ADOBO.jpg';
-                                    }
-                                    elseif ($item->item_name == 'Pork Sinigang') {
-                                        $imagePath = 'images/SINIGANG.jpg';
-                                    }
-                                    else {
-                                        $imageName = Str::slug($item->item_name);
-                                        $autoImagePath = "images/{$imageName}.jpg";
-                                        $imagePath = file_exists(public_path($autoImagePath)) ? $autoImagePath : 'images/placeholder.jpg';
-                                    }
-                                }
-                            @endphp
-                            
-                            <div class="card-image position-relative">
-                                <div class="image-container" style="height: 200px; overflow: hidden;">
-                                    <img src="{{ asset($imagePath) }}" 
-                                         class="card-img-top" 
-                                         alt="{{ $item->item_name }}"
-                                         style="height: 100%; width: 100%; object-fit: cover; transition: transform 0.5s ease;">
-                                </div>
-                                
-                                <!-- Category Badge -->
-                                <div class="position-absolute top-0 start-0 m-3">
-                                    <span class="badge bg-primary-gradient px-3 py-2">
-                                        <i class="fas fa-tag me-1"></i>{{ $category->name }}
-                                    </span>
-                                </div>
-                                
-                                <!-- Price Tag -->
-                                <div class="position-absolute top-0 end-0 m-3">
-                                    <div class="price-tag bg-success text-white px-3 py-2 rounded-pill shadow">
-                                        <i class="fas fa-peso-sign me-1"></i>{{ number_format($item->price, 2) }}
+                <!-- Menu Items Grid - Full Width -->
+                <div class="col-xl-9 col-lg-8">
+                    <div class="menu-container vh-100">
+                        <!-- Welcome Section -->
+                        <div class="welcome-section mb-4">
+                            <div class="welcome-card">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h2 class="welcome-title mb-2">Welcome to Foodhouse!</h2>
+                                        <p class="welcome-text mb-0">Browse our delicious menu and place your order</p>
+                                    </div>
+                                    <div class="col-md-4 text-md-end">
+                                        <div class="welcome-icon">
+                                            <i class="fas fa-hamburger fa-4x opacity-50"></i>
+                                        </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Overlay Effect -->
-                                <div class="image-overlay"></div>
-                            </div>
-                            
-                            <div class="card-body">
-                                <h5 class="card-title text-primary fw-bold">{{ $item->item_name }}</h5>
-                                <p class="card-text text-muted mb-3">
-                                    <i class="fas fa-info-circle me-2"></i>{{ Str::limit($item->description, 80) }}
-                                </p>
-                                
-                                <!-- Item Details -->
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="text-muted small">
-                                        @if($item->preparation_time)
-                                        <span class="me-3">
-                                            <i class="fas fa-clock me-1"></i> {{ $item->preparation_time }}min
-                                        </span>
-                                        @endif
-                                        @if($item->calories)
-                                        <span>
-                                            <i class="fas fa-fire me-1"></i> {{ $item->calories }} cal
-                                        </span>
-                                        @endif
-                                    </div>
-                                    
-                                    @if($item->track_inventory)
-                                        @if($item->stock_quantity > 0)
-                                        <span class="badge bg-success-gradient px-3 py-2">
-                                            <i class="fas fa-check-circle me-1"></i> {{ $item->stock_quantity }} in stock
-                                        </span>
-                                        @else
-                                        <span class="badge bg-danger-gradient px-3 py-2">
-                                            <i class="fas fa-times-circle me-1"></i> Out of Stock
-                                        </span>
-                                        @endif
-                                    @else
-                                        <span class="badge bg-success-gradient px-3 py-2">
-                                            <i class="fas fa-check-circle me-1"></i> Available
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                            
-                            <!-- Card Footer -->
-                            <div class="card-footer bg-white border-top-0 pt-0">
-                                @if(!$item->track_inventory || $item->stock_quantity > 0)
-                                <button class="btn btn-gradient-primary btn-block add-to-cart d-flex align-items-center justify-content-center py-3"
-                                        data-id="{{ $item->id }}"
-                                        data-name="{{ $item->item_name }}"
-                                        data-price="{{ $item->price }}"
-                                        data-stock="{{ $item->stock_quantity }}"
-                                        data-image="{{ asset($imagePath) }}">
-                                    <i class="fas fa-plus-circle me-2"></i>
-                                    <span>Add to Order</span>
-                                    <span class="ms-auto">
-                                        <i class="fas fa-peso-sign me-1"></i>{{ number_format($item->price, 2) }}
-                                    </span>
-                                </button>
-                                @else
-                                <button class="btn btn-outline-secondary btn-block d-flex align-items-center justify-content-center py-3" disabled>
-                                    <i class="fas fa-times-circle me-2"></i>
-                                    <span>Out of Stock</span>
-                                </button>
-                                @endif
                             </div>
                         </div>
+
+                        <!-- Menu Grid -->
+                        <div class="row g-4" id="menuItemsGrid">
+                            @foreach($categories as $category)
+                                @foreach($category->menuItems as $item)
+                                <div class="col-xxl-3 col-xl-4 col-lg-6 menu-item" data-category="{{ $category->id }}">
+                                    <div class="menu-card hover-effect">
+                                        <!-- Menu Item Image -->
+                                        @php
+                                            if ($item->image_url) {
+                                                $imagePath = $item->image_url;
+                                            } else {
+                                                if ($item->item_name == 'Crispy Calamares') {
+                                                    $imagePath = 'images/CALAMARES.jpg';
+                                                }
+                                                elseif ($item->item_name == 'Nachos Supreme') {
+                                                    $imagePath = 'images/NACHOS.jpg';
+                                                }
+                                                elseif ($item->item_name == 'Fresh Lemonade') {
+                                                    $imagePath = 'images/LEMONADE.jpg';
+                                                }
+                                                elseif ($item->item_name == 'Iced Tea') {
+                                                    $imagePath = 'images/NESTEA.jpg';
+                                                }
+                                                elseif ($item->item_name == 'Halo-Halo Special') {
+                                                    $imagePath = 'images/HALO HALO.jpg';
+                                                }
+                                                elseif ($item->item_name == 'Leche Flan') {
+                                                    $imagePath = 'images/LETCHE FLAN.jpg';
+                                                }
+                                                elseif ($item->item_name == 'Beef Steak') {
+                                                    $imagePath = 'images/BEEF STEAK.jpg';
+                                                }
+                                                elseif ($item->item_name == 'Grilled Pork Chop') {
+                                                    $imagePath = 'images/GRILLED.JPG';
+                                                }
+                                                elseif ($item->item_name == 'Chicken Adobo') {
+                                                    $imagePath = 'images/ADOBO.jpg';
+                                                }
+                                                elseif ($item->item_name == 'Pork Sinigang') {
+                                                    $imagePath = 'images/SINIGANG.jpg';
+                                                }
+                                                else {
+                                                    $imageName = Str::slug($item->item_name);
+                                                    $autoImagePath = "images/{$imageName}.jpg";
+                                                    $imagePath = file_exists(public_path($autoImagePath)) ? $autoImagePath : 'images/placeholder.jpg';
+                                                }
+                                            }
+                                        @endphp
+                                        
+                                        <div class="card-image position-relative">
+                                            <div class="image-container" style="height: 180px; overflow: hidden;">
+                                                <img src="{{ asset($imagePath) }}" 
+                                                     class="card-img-top" 
+                                                     alt="{{ $item->item_name }}"
+                                                     style="height: 100%; width: 100%; object-fit: cover; transition: transform 0.5s ease;">
+                                            </div>
+                                            
+                                            <!-- Category Badge -->
+                                            <div class="position-absolute top-0 start-0 m-2">
+                                                <span class="badge px-3 py-2" style="background: linear-gradient(135deg, #e63946, #d32f2f); color: white;">
+                                                    <i class="fas fa-tag me-1"></i>{{ $category->name }}
+                                                </span>
+                                            </div>
+                                            
+                                            <!-- Price Tag -->
+                                            <div class="position-absolute top-0 end-0 m-2">
+                                                <div class="price-tag px-3 py-2 rounded-pill shadow" style="background: #28a745; color: white;">
+                                                    <i class="fas fa-peso-sign me-1"></i>{{ number_format($item->price, 2) }}
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Overlay Effect -->
+                                            <div class="image-overlay"></div>
+                                        </div>
+                                        
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold" style="color: #e63946;">{{ $item->item_name }}</h5>
+                                            <p class="card-text text-muted mb-3">
+                                                <i class="fas fa-info-circle me-2"></i>{{ Str::limit($item->description, 80) }}
+                                            </p>
+                                            
+                                            <!-- Item Details -->
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div class="text-muted small">
+                                                    @if($item->preparation_time)
+                                                    <span class="me-2">
+                                                        <i class="fas fa-clock me-1"></i> {{ $item->preparation_time }}min
+                                                    </span>
+                                                    @endif
+                                                    @if($item->calories)
+                                                    <span>
+                                                        <i class="fas fa-fire me-1"></i> {{ $item->calories }} cal
+                                                    </span>
+                                                    @endif
+                                                </div>
+                                                
+                                                @if($item->track_inventory)
+                                                    @if($item->stock_quantity > 0)
+                                                    <span class="badge px-3 py-2 small" style="background: linear-gradient(135deg, #28a745, #218838); color: white;">
+                                                        <i class="fas fa-check-circle me-1"></i> {{ $item->stock_quantity }} in stock
+                                                    </span>
+                                                    @else
+                                                    <span class="badge px-3 py-2 small" style="background: linear-gradient(135deg, #dc3545, #c82333); color: white;">
+                                                        <i class="fas fa-times-circle me-1"></i> Out of Stock
+                                                    </span>
+                                                    @endif
+                                                @else
+                                                    <span class="badge px-3 py-2 small" style="background: linear-gradient(135deg, #28a745, #218838); color: white;">
+                                                        <i class="fas fa-check-circle me-1"></i> Available
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Card Footer -->
+                                        <div class="card-footer bg-white border-top-0 pt-0">
+                                            @if(!$item->track_inventory || $item->stock_quantity > 0)
+                                            <button class="btn btn-block add-to-cart d-flex align-items-center justify-content-center py-2"
+                                                    data-id="{{ $item->id }}"
+                                                    data-name="{{ $item->item_name }}"
+                                                    data-price="{{ $item->price }}"
+                                                    data-stock="{{ $item->stock_quantity }}"
+                                                    data-image="{{ asset($imagePath) }}"
+                                                    style="background: linear-gradient(135deg, #e63946 0%, #d32f2f 100%); color: white; border: none;">
+                                                <i class="fas fa-plus-circle me-2"></i>
+                                                <span>Add to Order</span>
+                                                <span class="ms-auto">
+                                                    <i class="fas fa-peso-sign me-1"></i>{{ number_format($item->price, 2) }}
+                                                </span>
+                                            </button>
+                                            @else
+                                            <button class="btn btn-outline-secondary btn-block d-flex align-items-center justify-content-center py-2" disabled>
+                                                <i class="fas fa-times-circle me-2"></i>
+                                                <span>Out of Stock</span>
+                                            </button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            @endforeach
+                        </div>
+                        
+                        <!-- Empty State -->
+                        <div class="empty-state text-center py-5 d-none" id="noItemsFound">
+                            <div class="empty-icon mb-4">
+                                <i class="fas fa-utensils fa-4x text-muted"></i>
+                            </div>
+                            <h3 class="empty-title mb-2">No items found</h3>
+                            <p class="empty-text mb-0">Try selecting a different category</p>
+                        </div>
                     </div>
-                    @endforeach
-                @endforeach
-            </div>
-            
-            <!-- Empty State -->
-            <div class="text-center py-5 d-none" id="noItemsFound">
-                <div class="empty-state">
-                    <i class="fas fa-utensils fa-4x text-muted mb-4"></i>
-                    <h3 class="text-muted">No items found</h3>
-                    <p class="text-muted">Try selecting a different category</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Checkout Modal -->
+<!-- Checkout Modal (from your original code - keeping it since you want functionality intact) -->
 <div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header bg-gradient-primary text-white">
+            <div class="modal-header" style="background: linear-gradient(135deg, #e63946 0%, #d32f2f 100%); color: white;">
                 <h5 class="modal-title"><i class="fas fa-shopping-bag me-2"></i>Place Your Order</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -252,7 +323,7 @@
                                     <input class="form-check-input" type="radio" name="order_type" 
                                            id="dineIn" value="dine_in" checked>
                                     <label class="form-check-label d-flex align-items-center" for="dineIn">
-                                        <div class="icon-circle bg-primary text-white me-3">
+                                        <div class="icon-circle me-3" style="background: #e63946; color: white;">
                                             <i class="fas fa-utensils"></i>
                                         </div>
                                         <div>
@@ -267,7 +338,7 @@
                                     <input class="form-check-input" type="radio" name="order_type" 
                                            id="takeaway" value="takeaway">
                                     <label class="form-check-label d-flex align-items-center" for="takeaway">
-                                        <div class="icon-circle bg-success text-white me-3">
+                                        <div class="icon-circle me-3" style="background: #28a745; color: white;">
                                             <i class="fas fa-shopping-bag"></i>
                                         </div>
                                         <div>
@@ -321,8 +392,8 @@
                                     </div>
                                 </div>
                                 <div class="text-end">
-                                    <h5 class="text-success mb-0">Total</h5>
-                                    <h3 class="text-success fw-bold" id="checkoutTotal">₱0.00</h3>
+                                    <h5 class="mb-0" style="color: #28a745;">Total</h5>
+                                    <h3 class="fw-bold" style="color: #28a745;" id="checkoutTotal">₱0.00</h3>
                                 </div>
                             </div>
                         </div>
@@ -342,7 +413,7 @@
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times me-2"></i>Cancel
                     </button>
-                    <button type="submit" class="btn btn-gradient-primary" id="placeOrderBtn">
+                    <button type="submit" class="btn" id="placeOrderBtn" style="background: linear-gradient(135deg, #e63946 0%, #d32f2f 100%); color: white; border: none;">
                         <i class="fas fa-paper-plane me-2"></i>Place Order
                     </button>
                 </div>
@@ -354,161 +425,443 @@
 
 @push('styles')
 <style>
-    /* Custom Styles */
-    :root {
-        --primary-color: #667eea;
-        --secondary-color: #764ba2;
-        --success-color: #38c172;
-        --warning-color: #f6993f;
-        --danger-color: #e3342f;
+    /* Full Width Layout */
+    .container-fluid {
+        max-width: 100%;
+        padding: 0;
     }
-    
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+
+    /* Premium Header */
+    .premium-header {
+        background: linear-gradient(135deg, #e63946 0%, #d32f2f 100%);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
     }
-    
-    .bg-gradient-success {
-        background: linear-gradient(135deg, var(--success-color) 0%, #38c1a2 100%) !important;
+
+    .premium-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #e63946, #ff6b6b, #ffd166);
     }
-    
-    .bg-gradient-info {
-        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%) !important;
+
+    /* Awesome Logo Design */
+    .logo-wrapper {
+        display: inline-block;
     }
-    
-    .bg-primary-gradient {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+
+    .logo-circle {
+        width: 60px;
+        height: 60px;
+        background: white;
+        color: #e63946;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        animation: pulse 2s infinite;
     }
-    
-    .bg-success-gradient {
-        background: linear-gradient(135deg, var(--success-color), #38c1a2) !important;
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
     }
-    
-    .bg-danger-gradient {
-        background: linear-gradient(135deg, var(--danger-color), #f65) !important;
+
+    .logo-ring {
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        animation: rotate 20s linear infinite;
     }
-    
-    .btn-gradient-primary {
-        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-        border: none;
+
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .brand-title {
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: 1px;
         color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .brand-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    /* Header Info */
+    .info-item {
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .info-icon {
+        width: 32px;
+        height: 32px;
+        background: white;
+        color: #e63946;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .info-label {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-value {
+        color: white;
+        font-size: 0.9rem;
+    }
+
+    /* Full Height Sections */
+    .vh-100 {
+        height: calc(100vh - 92px);
+    }
+
+    .sidebar-container {
+        background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        padding: 20px;
+        overflow-y: auto;
+        height: 100%;
+    }
+
+    .menu-container {
+        padding: 20px;
+        overflow-y: auto;
+        height: 100%;
+    }
+
+    /* Category Items */
+    .section-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2d3436;
+        display: flex;
+        align-items: center;
+    }
+
+    .category-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .category-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #2d3436;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .category-item:hover,
+    .category-item.active {
+        background: white;
+        border-color: #e63946;
+        transform: translateX(5px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .category-item.active {
+        background: linear-gradient(135deg, #e63946 15%, #d32f2f 100%);
+        color: white;
+    }
+
+    .category-icon {
+        width: 36px;
+        height: 36px;
+        background: rgba(230, 57, 70, 0.1);
+        color: #e63946;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+    }
+
+    .category-item.active .category-icon {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    .category-content {
+        flex: 1;
+    }
+
+    .category-name {
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .category-count {
+        font-size: 0.85rem;
+        opacity: 0.7;
+        font-weight: 600;
+    }
+
+    .category-item.active .category-count {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Cart Summary */
+    .cart-summary {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border: 1px solid #e9ecef;
+    }
+
+    .cart-items-container {
+        max-height: 200px;
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .total-row:last-child {
+        border-bottom: none;
+    }
+
+    .total-row.grand-total {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #e63946;
+        padding-top: 12px;
+        margin-top: 8px;
+        border-top: 2px solid #e9ecef;
+    }
+
+    /* Buttons */
+    .btn-checkout {
+        background: linear-gradient(135deg, #e63946, #d32f2f);
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: 600;
         transition: all 0.3s ease;
     }
-    
-    .btn-gradient-primary:hover {
+
+    .btn-checkout:hover:not(:disabled) {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 6px 20px rgba(230, 57, 70, 0.3);
     }
-    
-    .btn-gradient-primary:disabled {
-        background: linear-gradient(135deg, #ccc 0%, #999 100%);
+
+    .btn-checkout:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
     }
-    
-    .hover-effect {
+
+    .btn-clear {
+        background: transparent;
+        color: #495057;
+        border: 2px solid #e9ecef;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: 500;
         transition: all 0.3s ease;
     }
-    
+
+    .btn-clear:hover {
+        background: #f8f9fa;
+        border-color: #adb5bd;
+    }
+
+    /* Welcome Section */
+    .welcome-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .welcome-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .welcome-text {
+        opacity: 0.9;
+        font-size: 1rem;
+    }
+
+    .welcome-icon {
+        font-size: 4rem;
+        opacity: 0.3;
+    }
+
+    /* Menu Cards */
+    .menu-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        height: 100%;
+        border: 1px solid #e9ecef;
+    }
+
     .hover-effect:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+        border-color: #ff6b6b;
     }
-    
-    .card.hover-effect:hover .card-img-top {
+
+    .menu-card:hover .card-img-top {
         transform: scale(1.1);
     }
-    
+
     .image-overlay {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        height: 200px;
+        height: 180px;
         background: linear-gradient(to bottom, transparent 70%, rgba(0,0,0,0.7) 100%);
         pointer-events: none;
     }
-    
-    .price-tag {
-        font-weight: bold;
-        font-size: 1.1rem;
-    }
-    
-    .icon-circle {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .cart-item-quantity {
-        width: 60px;
-        text-align: center;
-        border: 1px solid #dee2e6;
-    }
-    
-    .quantity-btn {
-        width: 30px;
-        height: 30px;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #dee2e6;
-        background: white;
-    }
-    
-    .quantity-btn:hover {
-        background: #f8f9fa;
-    }
-    
+
+    /* Empty State */
     .empty-state {
-        padding: 4rem;
-        background: #f8f9fa;
-        border-radius: 15px;
-        border: 2px dashed #dee2e6;
+        padding: 60px 20px;
     }
-    
-    /* Custom Scrollbar */
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #adb5bd;
+        margin-bottom: 20px;
+    }
+
+    .empty-title {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .empty-text {
+        color: #adb5bd;
+    }
+
+    /* Scrollbar */
     ::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
     }
-    
+
     ::-webkit-scrollbar-track {
         background: #f1f1f1;
-        border-radius: 10px;
+        border-radius: 3px;
     }
-    
+
     ::-webkit-scrollbar-thumb {
-        background: var(--primary-color);
-        border-radius: 10px;
+        background: #e63946;
+        border-radius: 3px;
     }
-    
+
     ::-webkit-scrollbar-thumb:hover {
-        background: var(--secondary-color);
+        background: #d32f2f;
     }
-    
-    /* Animations */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+
+    /* Responsive */
+    @media (max-width: 1199px) {
+        .vh-100 {
+            height: auto;
+            min-height: calc(100vh - 92px);
+        }
     }
-    
-    .menu-item {
-        animation: fadeIn 0.5s ease forwards;
+
+    @media (max-width: 991px) {
+        .sidebar-container,
+        .menu-container {
+            padding: 15px;
+        }
+        
+        .brand-title {
+            font-size: 1.5rem;
+        }
+        
+        .welcome-title {
+            font-size: 1.5rem;
+        }
     }
-    
-    .menu-item:nth-child(1) { animation-delay: 0.1s; }
-    .menu-item:nth-child(2) { animation-delay: 0.2s; }
-    .menu-item:nth-child(3) { animation-delay: 0.3s; }
-    .menu-item:nth-child(4) { animation-delay: 0.4s; }
-    .menu-item:nth-child(5) { animation-delay: 0.5s; }
-    .menu-item:nth-child(6) { animation-delay: 0.6s; }
+
+    @media (max-width: 767px) {
+        .logo-circle {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
+        
+        .brand-title {
+            font-size: 1.3rem;
+        }
+        
+        .info-item {
+            margin-bottom: 10px;
+        }
+    }
 </style>
 @endpush
 
 @push('scripts')
 <script>
 let cart = JSON.parse(localStorage.getItem('foodhouse_cart') || '[]');
+
+// Update current time and date
+function updateDateTime() {
+    const now = new Date();
+    document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: true 
+    });
+    document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+    });
+}
 
 // Add to cart with animation
 $(document).on('click', '.add-to-cart', function() {
@@ -536,11 +889,11 @@ $(document).on('click', '.add-to-cart', function() {
     
     // Add animation
     $btn.html('<i class="fas fa-check me-2"></i>Added!');
-    $btn.removeClass('btn-gradient-primary').addClass('btn-success');
+    $btn.css('background', 'linear-gradient(135deg, #28a745, #218838)');
     
     setTimeout(() => {
-        $btn.html('<i class="fas fa-plus-circle me-2"></i>Add to Order');
-        $btn.removeClass('btn-success').addClass('btn-gradient-primary');
+        $btn.html('<i class="fas fa-plus-circle me-2"></i><span>Add to Order</span><span class="ms-auto"><i class="fas fa-peso-sign me-1"></i>' + item.price.toFixed(2) + '</span>');
+        $btn.css('background', 'linear-gradient(135deg, #e63946, #d32f2f)');
     }, 1000);
     
     updateCartDisplay();
@@ -548,7 +901,7 @@ $(document).on('click', '.add-to-cart', function() {
     showNotification(`${item.name} added to cart!`, 'success');
 });
 
-// Update cart display with enhanced design
+// Update cart display
 function updateCartDisplay() {
     const cartDiv = $('#cartItems');
     let subtotal = 0;
@@ -556,50 +909,38 @@ function updateCartDisplay() {
     if (cart.length === 0) {
         cartDiv.html(`
             <div class="text-center py-4">
-                <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                <p class="text-muted mb-0">Your cart is empty</p>
+                <i class="fas fa-shopping-basket fa-2x text-muted mb-3"></i>
+                <p class="text-muted mb-1">Your cart is empty</p>
                 <small class="text-muted">Add items from the menu</small>
             </div>
         `);
-        $('#checkoutBtn').prop('disabled', true).removeClass('shadow-sm');
+        $('#checkoutBtn').prop('disabled', true);
     } else {
-        let cartHtml = '<div class="list-group border-0">';
+        let cartHtml = '';
         
         cart.forEach((item, index) => {
             const itemTotal = item.price * item.quantity;
             subtotal += itemTotal;
             
             cartHtml += `
-                <div class="list-group-item border-0 mb-2 bg-light rounded-lg">
+                <div class="cart-item mb-3 pb-3 border-bottom" data-index="${index}">
                     <div class="d-flex align-items-center">
-                        <!-- Item Image -->
-                        <div class="me-3" style="width: 50px; height: 50px; overflow: hidden; border-radius: 8px; border: 2px solid white;">
-                            <img src="${item.image}" 
-                                 alt="${item.name}" 
-                                 style="width: 100%; height: 100%; object-fit: cover;"
+                        <div class="me-3" style="width: 40px; height: 40px; overflow: hidden; border-radius: 6px;">
+                            <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;"
                                  onerror="this.onerror=null; this.src='{{ asset("images/placeholder.jpg") }}';">
                         </div>
-                        
-                        <!-- Item Details -->
                         <div class="flex-grow-1">
-                            <h6 class="mb-1 fw-bold">${item.name}</h6>
-                            <small class="text-muted">₱${item.price.toFixed(2)} each</small>
+                            <div class="fw-bold small">${item.name}</div>
+                            <div class="text-muted small">₱${item.price.toFixed(2)} each</div>
                         </div>
-                        
-                        <!-- Quantity Controls -->
                         <div class="d-flex align-items-center">
-                            <div class="input-group input-group-sm me-2" style="width: 110px;">
-                                <button class="btn btn-outline-secondary quantity-btn decrease-quantity" 
-                                        data-index="${index}" type="button">-</button>
-                                <input type="number" class="form-control text-center cart-item-quantity" 
-                                       value="${item.quantity}" min="1" max="${item.stock}" 
-                                       data-index="${index}">
-                                <button class="btn btn-outline-secondary quantity-btn increase-quantity" 
-                                        data-index="${index}" type="button">+</button>
+                            <div class="quantity-controls me-3">
+                                <button class="btn btn-sm btn-outline-secondary decrease-quantity" data-index="${index}">-</button>
+                                <span class="mx-2 fw-bold">${item.quantity}</span>
+                                <button class="btn btn-sm btn-outline-secondary increase-quantity" data-index="${index}">+</button>
                             </div>
-                            <span class="me-3 fw-bold text-primary">₱${itemTotal.toFixed(2)}</span>
-                            <button class="btn btn-sm btn-outline-danger remove-from-cart" 
-                                    data-index="${index}">
+                            <div class="me-3 fw-bold" style="color: #e63946;">₱${itemTotal.toFixed(2)}</div>
+                            <button class="btn btn-sm btn-outline-danger remove-from-cart" data-index="${index}">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </div>
@@ -608,9 +949,8 @@ function updateCartDisplay() {
             `;
         });
         
-        cartHtml += '</div>';
         cartDiv.html(cartHtml);
-        $('#checkoutBtn').prop('disabled', false).addClass('shadow-sm');
+        $('#checkoutBtn').prop('disabled', false);
     }
     
     const tax = subtotal * 0.12;
@@ -621,7 +961,32 @@ function updateCartDisplay() {
     $('#cartTotal').text('₱' + total.toFixed(2));
 }
 
-// Update quantity with notification
+// Category filter
+$(document).on('click', '.category-item', function(e) {
+    e.preventDefault();
+    const category = $(this).data('category');
+    
+    $('.category-item').removeClass('active');
+    $(this).addClass('active');
+    
+    if (category === 'all') {
+        $('.menu-item').show();
+    } else {
+        $('.menu-item').hide();
+        $(`.menu-item[data-category="${category}"]`).show();
+    }
+    
+    const visibleItems = $('.menu-item:visible').length;
+    if (visibleItems === 0) {
+        $('#noItemsFound').removeClass('d-none');
+        $('#menuItemsGrid').addClass('d-none');
+    } else {
+        $('#noItemsFound').addClass('d-none');
+        $('#menuItemsGrid').removeClass('d-none');
+    }
+});
+
+// Quantity controls (using your original functions)
 $(document).on('click', '.increase-quantity', function() {
     const index = $(this).data('index');
     const item = cart[index];
@@ -649,28 +1014,6 @@ $(document).on('click', '.decrease-quantity', function() {
     }
 });
 
-// Update quantity via input
-$(document).on('change', '.cart-item-quantity', function() {
-    const index = $(this).data('index');
-    const newQuantity = parseInt($(this).val());
-    const item = cart[index];
-    
-    if (newQuantity < 1) {
-        $(this).val(1);
-        item.quantity = 1;
-    } else if (item.stock > 0 && newQuantity > item.stock) {
-        showNotification(`Cannot add more than ${item.stock} items (available stock)`, 'warning');
-        $(this).val(item.quantity);
-        return;
-    } else {
-        item.quantity = newQuantity;
-    }
-    
-    updateCartDisplay();
-    saveCart();
-});
-
-// Remove from cart
 $(document).on('click', '.remove-from-cart', function() {
     const index = $(this).data('index');
     const itemName = cart[index].name;
@@ -688,36 +1031,6 @@ $('#clearCartBtn').click(function() {
         saveCart();
         showNotification('Cart cleared', 'info');
     }
-});
-
-// Category filter with animation
-$(document).on('click', '.category-filter', function(e) {
-    e.preventDefault();
-    const category = $(this).data('category');
-    
-    $('.category-filter').removeClass('active');
-    $(this).addClass('active');
-    
-    // Add animation to items
-    $('.menu-item').hide().removeClass('d-block');
-    
-    setTimeout(() => {
-        if (category === 'all') {
-            $('.menu-item').addClass('d-block').show();
-        } else {
-            $(`.menu-item[data-category="${category}"]`).addClass('d-block').show();
-        }
-        
-        // Show/hide empty state
-        const visibleItems = $('.menu-item:visible').length;
-        if (visibleItems === 0) {
-            $('#noItemsFound').removeClass('d-none');
-            $('#menuItemsGrid').addClass('d-none');
-        } else {
-            $('#noItemsFound').addClass('d-none');
-            $('#menuItemsGrid').removeClass('d-none');
-        }
-    }, 300);
 });
 
 // Show/hide table number
@@ -738,7 +1051,6 @@ $('#checkoutBtn').click(function() {
         return;
     }
     
-    // Prepare checkout items display
     let checkoutHtml = '';
     let subtotal = 0;
     
@@ -759,7 +1071,7 @@ $('#checkoutBtn').click(function() {
                     </div>
                 </div>
                 <div class="text-end">
-                    <strong class="text-primary">₱${itemTotal.toFixed(2)}</strong>
+                    <strong style="color: #e63946;">₱${itemTotal.toFixed(2)}</strong>
                 </div>
             </div>
             <input type="hidden" name="items[${index}][menu_item_id]" value="${item.id}">
@@ -775,12 +1087,11 @@ $('#checkoutBtn').click(function() {
     $('#checkoutTax').text('₱' + tax.toFixed(2));
     $('#checkoutTotal').text('₱' + total.toFixed(2));
     
-    // Show modal with animation
     const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
     checkoutModal.show();
 });
 
-// Form submission
+// Form submission (using your original function)
 $('#checkoutForm').submit(function(e) {
     e.preventDefault();
     
@@ -789,28 +1100,21 @@ $('#checkoutForm').submit(function(e) {
         return;
     }
     
-    // Show loading
     $('#placeOrderBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Processing...');
     
-    // Submit form via AJAX
     $.ajax({
         url: $(this).attr('action'),
         type: 'POST',
         data: $(this).serialize(),
         success: function(response) {
             if (response.success) {
-                // Clear cart
                 cart = [];
                 localStorage.removeItem('foodhouse_cart');
                 updateCartDisplay();
                 
-                // Close modal
                 $('#checkoutModal').modal('hide');
-                
-                // Show success message
                 showNotification('Order placed successfully! Order #: ' + response.order_number, 'success');
                 
-                // Redirect to orders page after 2 seconds
                 setTimeout(() => {
                     window.location.href = response.redirect;
                 }, 2000);
@@ -842,9 +1146,15 @@ function saveCart() {
 
 // Notification function
 function showNotification(message, type = 'info') {
-    // Create toast
+    const colors = {
+        success: '#06d6a0',
+        warning: '#ffd166',
+        danger: '#e63946',
+        info: '#e63946'
+    };
+    
     const toastHtml = `
-        <div class="toast align-items-center text-white bg-${type} border-0" role="alert">
+        <div class="toast align-items-center text-white border-0" role="alert" style="background: ${colors[type] || colors.info};">
             <div class="d-flex">
                 <div class="toast-body d-flex align-items-center">
                     <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : type === 'danger' ? 'times-circle' : 'info-circle'} me-2"></i>
@@ -855,37 +1165,24 @@ function showNotification(message, type = 'info') {
         </div>
     `;
     
-    // Add to toast container
     $('.toast-container').append(toastHtml);
-    
-    // Show toast
     const toast = new bootstrap.Toast($('.toast').last()[0]);
     toast.show();
     
-    // Remove after 3 seconds
     setTimeout(() => {
         $('.toast').last().remove();
     }, 3000);
 }
 
-// Initialize on page load
+// Initialize
 $(document).ready(function() {
+    updateDateTime();
     updateCartDisplay();
+    setInterval(updateDateTime, 60000);
     
-    // Create toast container if it doesn't exist
     if ($('.toast-container').length === 0) {
         $('body').append('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
     }
-    
-    // Add hover effect to cards
-    $('.card.hover-effect').hover(
-        function() {
-            $(this).find('.card-img-top').css('transform', 'scale(1.1)');
-        },
-        function() {
-            $(this).find('.card-img-top').css('transform', 'scale(1)');
-        }
-    );
 });
 </script>
 @endpush

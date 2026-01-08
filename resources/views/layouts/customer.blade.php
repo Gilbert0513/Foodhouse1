@@ -8,17 +8,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .navbar-brand {
-            font-weight: bold;
-        }
-        .nav-link:hover {
-            background-color: rgba(0,0,0,0.05);
-        }
-    </style>
+   <style>
+    /* ADD ONLY THIS LINE FOR COLOR CHANGE */
+    .navbar-brand, .logo-icon, .logo-text, .btn-primary, .badge-danger {
+        color: #e63946 !important;
+    }
+    .btn-primary {
+        background-color: #e63946 !important;
+        border-color: #e63946 !important;
+    }
+    .btn-primary:hover {
+        background-color: #d32f2f !important;
+        border-color: #d32f2f !important;
+    }
+</style>
     @stack('styles')
 </head>
 <body>
